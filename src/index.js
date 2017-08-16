@@ -110,7 +110,10 @@ import registerServiceWorker from './registerServiceWorker';
 class Clock extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {date: new Date()}
+    this.state = {
+      date: new Date(),
+      counter: 0
+    }
   }
 
   componentDidMount() {
@@ -123,6 +126,7 @@ class Clock extends React.Component {
 
   tick() {
     this.setState({date: new Date()})
+    this.setState( prevState => ({ counter: prevState.counter + 1 }))
   }
 
   render() {
@@ -130,6 +134,7 @@ class Clock extends React.Component {
       <div>
         <h1>Hello, world!</h1>
         <FormattedDate date={this.state.date} />
+        <h3> counter: {this.state.counter} seconds </h3>
       </div>
     );
   }
