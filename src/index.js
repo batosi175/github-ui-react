@@ -4,90 +4,79 @@ import './index.css';
 
 import registerServiceWorker from './registerServiceWorker';
 
-// class Clock extends React.Component {
-//   constructor(props) {
-//     super(props)
-//     this.state = {
-//       date: new Date(),
-//       counter: 0
-//     }
-//   }
+function UserGreeting(props) {
+  return <h1>Welcome back!</h1>;
+}
 
-//   componentDidMount() {
-//     this.timerId =  setInterval(() => this.tick(), 1000)
-//   }
+function GuestGreeting(props) {
+  return <h1>Please sign up.</h1>;
+}
 
-//   componentWillUnmount() {
-//     clearInterval(this.timerId)
-//   }
+function Greeting(props) {
+  const isLoggedIn = props.isLoggedIn
+  if (isLoggedIn) {
+    return <UserGreeting />
+  } 
+  else {
+    return <GuestGreeting />
+  }
+}
 
-//   tick() {
-//     this.setState({date: new Date()})
-//     this.setState( prevState => ({ counter: prevState.counter + 1 }))
-//   }
+function LoginButton(props) {
+  return (
+    <button onClick={props.onClick}>
+      Login
+    </button>
+  );
+}
 
-//   render() {
-//     return (
-//       <div>
-//         <h1>Hello, world!</h1>
-//         <FormattedDate date={this.state.date} />
-//         <h3> counter: {this.state.counter} seconds </h3>
-//       </div>
-//     );
-//   }
-// }
+function LogoutButton(props) {
+  return (
+    <button onClick={props.onClick}>
+      Logout
+    </button>
+  );
+}
 
-// function FormattedDate(props) {
-//   return <h2>It is {props.date.toLocaleTimeString()}.</h2>;
-// }
-
-// function App(props) {
-//   return (
-//     <div>
-//       <Clock />
-//       <Clock />
-//       <Clock />
-//     </div>
-//   )
-// }
-// ReactDOM.render(
-//   <App />,
-//   document.getElementById('root')
-// );
-
-class Toggle extends React.Component{
+class LoginConrol extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      isToggled: false
-    }
-
-    // make it so 'this' works in the callback
-
-    this.handleClick = this.handleClick.bind(this)
+    this.state = {isLoggedIn: false}
+    this.handleLoginClick = this.handleLoginClick.bind(this)
+    this.handleLogoutClick = this.handleLogoutClick.bind(this)
   }
 
-  handleClick()  {
-    this.setState( prevState => (
-      {isToggled: !prevState.isToggled}
-    ))
+  handleLoginClick() {
+    this.setState({isLoggedIn: true})
+  }
+
+  handleLogoutClick() {
+    this.setState({isLoggedIn: false})    
   }
 
   render() {
+    const isLoggedIn = this.state.isLoggedIn
+    let button = null
+
+    if (isLoggedIn) {
+      button = <LogoutButton onClick={this.handleLogoutClick} />      
+    }
+    else {
+      button = <LoginButton onClick={this.handleLoginClick} />
+    }
+
     return (
-      <button onClick={this.handleClick} >
-        {this.state.isToggled ? 'On' : 'Off'}
-      </button>
+      <div>
+        <Greeting isLoggedIn={isLoggedIn} />
+        {button}
+      </div>
     )
   }
-
-
 }
 
 ReactDOM.render(
-  <Toggle />, 
+  <LoginConrol />, 
   document.getElementById('root')
 )
-
 
 registerServiceWorker()
