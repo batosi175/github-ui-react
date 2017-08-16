@@ -64,7 +64,7 @@ class Toggle extends React.Component{
 
     // make it so 'this' works in the callback
 
-    // this.handleClick = this.handleClick.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
 
   handleClick()  {
@@ -75,7 +75,7 @@ class Toggle extends React.Component{
 
   render() {
     return (
-      <button onClick={ e => this.handleClick(e)} >
+      <button onClick={handleClick} >
         {this.state.isToggled ? 'On' : 'Off'}
       </button>
     )
