@@ -4,45 +4,53 @@ import './index.css'
 
 import registerServiceWorker from './registerServiceWorker'
 
-class Nameform extends React.Component {
+class Reservations extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {value: 'coconut'}
+    this.state = {
+      isGoing: true,
+      numberOfGuests: 2
+    }
 
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
+    this.handleInputChange = this.handleInputChange.bind(this)
+   }
 
-  handleChange(event) {
-    this.setState({value: event.target.value})
-  }
-
-  handleSubmit(event) {
-    alert(`your favorite flavor is: ${this.state.value}`)
-    event.preventDefault()
+  handleInputChange(event) {
+    const target = event.target
+    const value = target.type === 'checkbox' ? target.checked : target.value
+    const name = target.name
+    this.setState({[name]: value})
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form >
         <label>
-          Pick your favorite La Croix flavor:
-          <select value={this.state.value} onchange={this.handleChange} >
-            <option value="grapefruit">grapefruit</option>
-            <option value="coconut">coconut</option>
-            <option value="pineapple">pineapple</option>
-            <option value="guanavana">guanavana</option>
-          </select>
+          Is Going: 
+          <input 
+            type="checkbox"
+            name="isGoing"
+            checked={this.state.isGoing}
+            onChange={this.handleInputChange}
+          />
         </label>
-        <input type="submit" value="Submit" />
+        <br />
+        <label>
+          <input 
+            type="number"
+            name="numberOfGuests"
+            value={this.state.numberOfGuests}
+            onChange={this.handleInputChange}
+          />
+        </label>
       </form>
     )
   }
 }
 
 ReactDOM.render(
-  <Nameform />,
+  <Reservations />,
   document.getElementById('root')
 )
 
