@@ -4,42 +4,40 @@ import './index.css'
 
 import registerServiceWorker from './registerServiceWorker'
 
-function Blog(props) {
-  const sidebar = (
-    <ul>
-      {
-        props.posts.map(post => 
-          <li key={post.id}>
-            {post.title}
-          </li>
-        )
-      }
-    </ul>
-  )
+class Nameform extends React.Component {
+  constructor(props) {
+    super(props)
 
-  const content = props.posts.map(post => 
-    <div key={post.id}>
-      <h3>{post.title}</h3>
-      <p>{post.content}</p>
-    </div>
-  )
+    this.state = {value: ''}
 
-  return (
-    <div>
-      {sidebar}
-      <hr />
-      {content}
-    </div>
-  )
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value})
+  }
+
+  handleSubmit(event) {
+    alert(`a name was submitted: ${this.state.value}`)
+    event.preventDefault()
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name: 
+          <input type="text" value={this.state.value} onChange={this.handleChange}  />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    )
+  }
 }
 
-const posts = [
-  { id: 1, title: 'hello World', content: 'welcome to learning react' }, 
-  { id: 2, title: 'hacker news', content: 'get all your leet hacker stuffs'}
-]
-
 ReactDOM.render(
-  <Blog posts={posts}/>,
+  <Nameform />,
   document.getElementById('root')
 )
 
