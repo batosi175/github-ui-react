@@ -1,45 +1,36 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
 
-import registerServiceWorker from './registerServiceWorker';
-// prevent rendering example
+import registerServiceWorker from './registerServiceWorker'
 
-function WarningBanner(props) {
-  if (!props.warn) {
-    return null;
-  }
-
+function ListItem(props) {
   return (
-    <div className='warning'>
-      Warning !
-    </div>
+    <li>
+      { props.value }
+    </li>
   )
 }
 
-class Page extends React.Component{
-  constructor(props){
-    super(props)
-    this.state = {showWarning: true}
-    this.handleToggleClick = this.handleToggleClick.bind(this)
-  }
 
-  handleToggleClick() {
-    this.setState(prevState => ({showWarning: !prevState.showWarning}))
-  }
-
-  render() {
-    return (
-      <div>
-        <WarningBanner warn={this.state.showWarning}/>
-        <button onClick={this.handleToggleClick}>{this.state.showWarning ? 'Hide' : 'Show'}</button>
-      </div>
-    )
-  }
+function NumberList(props) {
+  const numbers = props.numbers
+  
+  const listItems = numbers.map( number => 
+    // <li key={ number.toString() }>{ number }</li>
+    <ListItem key={ number.toString() } value={ number }/>
+  )
+  return (
+    <ul>
+      { listItems }
+    </ul>
+  )
 }
 
+const numbers = [1,2,3,4,5]
+
 ReactDOM.render(
-  <Page />,
+  <NumberList numbers={numbers}/>,
   document.getElementById('root')
 )
 
