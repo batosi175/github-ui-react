@@ -37,7 +37,7 @@ function WelcomeDialog(){
 class SignUpDialog extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {login: ''}
+    this.state = {login: '', submitted: false}
     this.handleChange = this.handleChange.bind(this)
     this.handleSignUp = this.handleSignUp.bind(this)
   }
@@ -47,20 +47,36 @@ class SignUpDialog extends React.Component {
   }
 
   handleSignUp() {
-    alert(`Welcome Aboard ${this.state.login}!!`)
+    // alert(`Welcome Aboard ${this.state.login}!!`)
+    this.setState({submitted: true});
   }
 
   render() {
-    return (
-      <Dialog title="Mars Exploration Program"
-              message="How should we refer to you?">
+    const submitted = this.state.submitted
+    const login = this.state.login
+    if (submitted) {
+      return (
+        <Dialog title={`Mars Exploration Program: Welcome Aboard ${login}`}
+              message="Shall we reclassify you?">
         <input value={this.state.login}
-               onChange={this.handleChange} />
+                onChange={this.handleChange} />
         <button onClick={this.handleSignUp}>
-          Sign Me Up!
+          Change my Name
         </button>
       </Dialog>
-    );
+      )
+    } else {
+      return (
+        <Dialog title="Mars Exploration Program"
+                message="How should we refer to you?">
+          <input value={this.state.login}
+                 onChange={this.handleChange} />
+          <button onClick={this.handleSignUp}>
+            Sign Me Up!
+          </button>
+        </Dialog>
+      )
+    }
   }
 }
 
