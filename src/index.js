@@ -4,103 +4,70 @@ import './index.css'
 
 import registerServiceWorker from './registerServiceWorker'
 
-function toCelsius(fahrenheit) {
-  return (fahrenheit - 32) * 5 / 9;
+function FancyBorder(props) {
+  const color = props.color
+  return (
+    <div className={'FancyBorder FancyBorder-' + props.color } style={{border: `solid 5px ${color}`}} >
+      {props.children}
+    </div>  
+  )
 }
 
-function toFahrenheit(celsius) {
-  return (celsius * 9 / 5) + 32;
+function Dialog(props){
+  return (
+    <FancyBorder color='red' >
+      <h1 className='Dialog-title'>{props.title}</h1>
+      <p className='Dialog-message'>
+        {props.message}
+      </p>
+      {props.children}
+    </FancyBorder>
+  )
 }
 
-function tryConvert(temperature, convert) {
-  const input = parseFloat(temperature);
-  if (Number.isNaN(input)) {
-    return '';
-  }
-  const output = convert(input);
-  const rounded = Math.round(output * 1000) / 1000;
-  return rounded.toString();
+function WelcomeDialog(){
+  return (
+    <Dialog 
+      title="welcome to react" 
+      message="Thank you for visting our spacecraft!!"
+    />
+  )
 }
 
-function BoilingVerdict(props){
-  if (props.celcius >= 100) {
-    return <p>The water should boil.</p>
-  }
-  return <p>The water should not boil.</p>
-}
-
-const scaleNames = {
-  c: 'Celcius',
-  f: 'Fahrenheit'
-}
-
-class TemperatureInput extends React.Component{
+class SignUpDialog extends React.Component {
   constructor(props) {
     super(props)
-    // this.state = {temperature: ''}
-
+    this.state = {login: ''}
     this.handleChange = this.handleChange.bind(this)
+    this.handleSignUp = this.handleSignUp.bind(this)
   }
 
-  handleChange(event) {
-    // this.setState({temperature: event.target.value})
-    this.props.onTemperatureChange(event.target.value)
+  handleChange(e) {
+    this.setState({login: e.target.value})
   }
 
-  render() {
-    const temperature = this.props.temperature
-    const scale = this.props.scale
-    return (
-      <fieldset>
-        <legend>Enter Temperature in {scaleNames[scale]}:</legend>
-        <input value={temperature} onChange={this.handleChange} type='number'/>
-      </fieldset>
-    )
-  }
-}
-
-class Calculator extends React.Component {
-  constructor(props) {
-    super(props)
-    this.handleCelciusChange = this.handleCelciusChange.bind(this)
-    this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this)
-    this.state = {temperature: '', scale: 'c'}
-  }
-
-  handleCelciusChange(temperature) {
-    this.setState({scale: 'c', temperature})
-  }
-
-  handleFahrenheitChange(temperature) {
-    this.setState({scale: 'f', temperature})
+  handleSignUp() {
+    alert(`Welcome Aboard ${this.state.login}!!`)
   }
 
   render() {
-    const scale = this.state.scale
-    const temperature = this.state.temperature
-    const celcius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature
-    const fahrenheit = scale === 'c' ? tryConvert( temperature, toFahrenheit ) : temperature
     return (
-      <div>
-        <TemperatureInput
-        temperature={celcius}
-        onTemperatureChange={this.handleCelciusChange}
-        scale="c" />
-        <TemperatureInput
-        temperature={fahrenheit}
-        onTemperatureChange={this.handleFahrenheitChange}
-        scale="f" />
-        <BoilingVerdict celcius={parseFloat(celcius)} />
-      </div>
+      <Dialog title="Mars Exploration Program"
+              message="How should we refer to you?">
+        <input value={this.state.login}
+               onChange={this.handleChange} />
+        <button onClick={this.handleSignUp}>
+          Sign Me Up!
+        </button>
+      </Dialog>
     );
   }
 }
 
-
 ReactDOM.render(
-  <Calculator />,
+  <SignUpDialog />,
   document.getElementById('root')
-)
 
+)
 
 registerServiceWorker()
