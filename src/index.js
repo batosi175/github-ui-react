@@ -33,14 +33,25 @@ class ProductRow extends React.Component {
 // will contain products row and and product category row
 class ProductTable extends React.Component {
   render() {
+    const inStockOnly = this.props.inStockOnly
     var rows = []
     var lastCategory = null
     this.props.products.forEach(product => {
+
+      // check if filter text fails, stockonly and not in stock 
+
+      if (product.name.indexOf(this.props.filterText) === -1 || (this.props.inStockOnly && !product.stocked)) {
+        return
+      }
+
+      // check if it is a category value
       if (product.category !== lastCategory){
         rows.push(
           <ProductCategoryRow category={product.category} key={product.category} />
         )
       }
+
+      // push it as product if other special checks fail
       rows.push(
         <ProductRow product={product} key={product.name} />
       )
@@ -62,12 +73,28 @@ class ProductTable extends React.Component {
 
 // will contain search feature
 class SearchBar extends React.Component{
+  constructor(props) {
+    super(props)
+    this.handleFilterTextInputChanged = this.handleFilterTextInputChanged.bind(this)
+    this.handleStockOnlyInputChanged = this.handleStockOnlyInputChanged.bind(this)
+  }
+
+  handleFilterTextInputChanged(e) {
+    this.props.onFilterTextInput(e.target.value)
+  }
+
+  handleStockOnlyInputChanged(e) {
+    this.props.onStockOnlyInput(e.target.checked)
+  }
+
   render() {
+    const filterText = this.props.filterText
+    const inStockOnly = this.props.inStockOnly
     return (
       <form>
-        <input type="text" placeholder="Search..." />
+        <input type="text" placeholder="Search..." value={filterText} onChange={this.handleFilterTextInputChanged} />
         <p>
-          <input type="checkbox" />
+          <input type="checkbox" checked={inStockOnly} onChange={this.handleStockOnlyInputChanged} />
           {''}
           Only show products in stock
         </p>
@@ -78,11 +105,35 @@ class SearchBar extends React.Component{
 
 // will contain searchbar and products table
 class FilterableProductTable extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state={filterText: '', inStockOnly: false}
+    this.handleFilterTextInput = this.handleFilterTextInput.bind(this)
+    this.handleStockOnlyInput = this.handleStockOnlyInput.bind(this)
+  }
+
+  handleFilterTextInput(value) {
+    this.setState({filterText: value})
+  }
+
+  handleStockOnlyInput(value) {
+    this.setState({inStockOnly: value})
+  }
+
   render() {
     return (
       <div>
-        <SearchBar />
-        <ProductTable products={this.props.products} />
+        <SearchBar
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+          onFilterTextInput={this.handleFilterTextInput}
+          onStockOnlyInput={this.handleStockOnlyInput}
+         />
+        <ProductTable 
+        products={this.props.products}
+        filterText={this.state.filterText}
+        inStockOnly={this.state.inStockOnly}
+        />
       </div>
     )
   }
