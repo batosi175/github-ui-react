@@ -2,4 +2,14 @@ body {
   padding: 5px
 }
 
+.flex-container {
+  border: solid 1px red;
+  display: flex;
+  flex-direction: row;
+}
 
+.flex-item {
+  border: solid 1px blue;
+  flex-grow: 1;
+  text-align: center;
+}
