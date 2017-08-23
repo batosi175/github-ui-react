@@ -5,32 +5,37 @@ import './index.css'
 import registerServiceWorker from './registerServiceWorker'
 // application meant to be a simple orgs listing for and details view for github components
 
+
+
 class OrgDetails extends React.Component{
-  constructor(props) {
+  constructor(props){
     super(props)
-    this.state = {orgDetails: {}}
-    this._fetchOrgDetails = this._fetchOrgDetails.bind(this)
+    this.state = {repos: []}
+    // this._fetchRepos() = this._fetchRepos.bind(this)
   }
 
-  componentWillMount(){
-
+  componentDidMount(){
+    console.log('mounted')
   }
-
-  componentWillUpdate(){
-
+  componentWillReceiveProps(){
+    console.log('getting teh fucking props', this.state.props.org)
   }
-
-  _fetchOrgDetails(org){
-    fetch(`https://api.github.com/orgs/${org}`).then(response => {
-      this.setState({orgDetails: response})
-    });
-  }
+  
+  // _fetchRepos(repoUrl){
+  //   fetch(repo).then(response => {
+  //     return response.json();
+  //   })
+  //   .then(resolved => {
+  //     this.setState({repos: resolved})
+  //   })
+  // }
 
   render() {
     const org = this.props.org
     return (
       <div className="org-details">
-        {org}
+        <h3>{org.login}</h3>
+        {/* <RepoList  /> */}
       </div>
     )
   }
@@ -69,14 +74,25 @@ class OrgsAndDetails extends React.Component {
     this.state = {currentOrg: '', orgDetails: {}}
     this.handleOrgClicked = this.handleOrgClicked.bind(this)
   }
+  
 
   handleOrgClicked(id){
     this.setState({currentOrg: id})
+    this._fetchOrgDetails(id)
+  }
+  _fetchOrgDetails(org){
+    fetch(`https://api.github.com/orgs/${org}`).then(response => {
+      return response.json();
+    })
+    .then(resolved => {
+      this.setState({orgDetails: resolved})
+      
+    })
   }
 
   render() {
     const orgs = this.props.orgs
-    const details = this.state.currentOrg ? <OrgDetails org={this.state.currentOrg} /> : ''
+    const details = this.state.currentOrg ? <OrgDetails org={this.state.orgDetails}/> : ''
     return (
       <div>
         <OrgList orgs={orgs} onOrgClicked={this.handleOrgClicked} />
@@ -84,7 +100,6 @@ class OrgsAndDetails extends React.Component {
       </div>
     )
   }
-
 }
 
 const orgs = [
