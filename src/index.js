@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
+import GithubViewer from './GithubViewer.js'
 
 import registerServiceWorker from './registerServiceWorker'
 // application meant to be a simple orgs listing for and details view for github components
@@ -17,8 +18,12 @@ class OrgDetails extends React.Component{
   componentDidMount(){
     console.log('mounted')
   }
-  componentWillReceiveProps(){
-    console.log('getting teh fucking props', this.state.props.org)
+  componentWillReceiveProps(nextProps){
+    var something = this.props === nextProps;
+    console.log(this.props)
+    console.log(nextProps)
+    console.log('getting teh fucking props', this.props, nextProps )
+    console.log(something);
   }
   
   // _fetchRepos(repoUrl){
@@ -110,10 +115,15 @@ const orgs = [
   {id: 'emberjs'}
 ]
 
+// ReactDOM.render(
+//   <OrgsAndDetails
+//     orgs={orgs}
+//   />,
+//   document.getElementById('container')
+// )
+
 ReactDOM.render(
-  <OrgsAndDetails
-    orgs={orgs}
-  />,
+  <GithubViewer orgs={orgs} />,
   document.getElementById('container')
 )
 
